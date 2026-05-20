@@ -21,7 +21,18 @@ const AdminLogin = () => {
             login(response.data.access);
             navigate('/admin');
         } catch (err) {
-            setError('Invalid credentials. Please try again.');
+            console.error("Login error details:", err);
+            if (err.response) {
+                setError(`Server Error (${err.response.status}): ${JSON.stringify(err.response.data)}`);
+            } else if (err.request) {
+                // Determine absolute request URL
+                const requestUrl = err.config.url.startsWith('http') 
+                    ? err.config.url 
+                    : (axios.defaults.baseURL.replace(/\/$/, '') + '/' + err.config.url.replace(/^\//, ''));
+                setError(`Network Error: Request sent to ${requestUrl} but no response was received. Check if VITE_API_URL is correct.`);
+            } else {
+                setError(`Request Error: ${err.message}`);
+            }
         }
     };
 
