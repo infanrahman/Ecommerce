@@ -18,12 +18,30 @@ const AdminLogin = () => {
                 username,
                 password
             });
-            login(response.data.access);
+            
+            // Decrypt token to get user details via fetchUser
+            localStorage.setItem('adminToken', response.data.access);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access;
+            const userRes = await axios.get('/api/users/me/');
+            
+            if (!userRes.data.is_staff) {
+                localStorage.removeItem('adminToken');
+                delete axios.defaults.headers.common['Authorization'];
+                setError('Access denied. You do not have administrator permissions.');
+                return;
+            }
+            
+            // Fully log in the user in the context
+            await login(response.data.access);
             navigate('/admin');
         } catch (err) {
             console.error("Login error details:", err);
             if (err.response) {
-                setError(`Server Error (${err.response.status}): ${JSON.stringify(err.response.data)}`);
+                if (err.response.status === 401) {
+                    setError('Invalid username or password.');
+                } else {
+                    setError(`Server Error (${err.response.status}): ${JSON.stringify(err.response.data)}`);
+                }
             } else if (err.request) {
                 // Determine absolute request URL
                 const requestUrl = err.config.url.startsWith('http') 
