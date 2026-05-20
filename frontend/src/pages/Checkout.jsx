@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 
 const Checkout = () => {
     const { cart, cartTotal, clearCart } = useCart();
-    const { isAuthenticated, user, login } = useAuth();
+    const { isAuthenticated, user, login, token } = useAuth();
     const navigate = useNavigate();
 
     // Checkout Form state
@@ -107,12 +107,18 @@ const Checkout = () => {
                     price: item.product.price
                 }))
             };
-            await axios.post('/api/orders/', orderData);
+            await axios.post('/api/orders/', orderData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             clearCart();
             setSuccess(true);
         } catch (error) {
             console.error("Checkout failed", error);
-            alert("Checkout failed. Please try again.");
+            let errorMessage = "Checkout failed. Please try again.";
+            if (error.response && error.response.data) {
+                errorMessage += "\nDetails: " + JSON.stringify(error.response.data);
+            }
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }
