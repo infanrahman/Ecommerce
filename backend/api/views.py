@@ -62,12 +62,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
 
     def get_permissions(self):
-        if self.action in ['create', 'list', 'retrieve']:
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+        if self.action in ['list', 'retrieve']:
             return [permissions.IsAuthenticated()]
         return [permissions.IsAdminUser()]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        user = self.request.user if self.request.user.is_authenticated else None
+        serializer.save(user=user)
 
     def get_queryset(self):
         user = self.request.user
