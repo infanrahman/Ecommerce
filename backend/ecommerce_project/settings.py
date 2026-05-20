@@ -27,6 +27,10 @@ if env_file.exists():
                 k, v = line.split('=', 1)
                 os.environ[k.strip()] = v.strip()
 
+# Map POSTGRES_URL to DATABASE_URL if injected by Vercel integration
+if 'POSTGRES_URL' in os.environ and 'DATABASE_URL' not in os.environ:
+    os.environ['DATABASE_URL'] = os.environ['POSTGRES_URL']
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
