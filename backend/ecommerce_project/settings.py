@@ -42,6 +42,14 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:5173',
+]
+
 
 # Application definition
 
