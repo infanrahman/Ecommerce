@@ -533,6 +533,11 @@ a {
 .mb-2 { margin-bottom: 2rem; }
 .mt-2 { margin-top: 2rem; }
 
+/* Admin Layout Utilities */
+.admin-mobile-header { display: none; }
+.admin-sidebar-overlay { display: none; }
+.desktop-only { display: block; }
+
 /* =========================================
    RESPONSIVE — 768px and below
    ========================================= */
@@ -909,16 +914,6 @@ a {
 }
 
 /* Admin Styling */
-.admin-mobile-header {
-  display: none;
-}
-.admin-sidebar-overlay {
-  display: none;
-}
-.desktop-only {
-  display: block;
-}
-
 .admin-layout {
   display: flex;
   min-height: calc(100vh - 70px);
