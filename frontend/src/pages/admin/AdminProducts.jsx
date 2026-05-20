@@ -8,7 +8,8 @@ const AdminProducts = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState(null); // Null for create, product object for edit
+    const [currentProduct, setCurrentProduct] = useState(null);
+    const [saving, setSaving] = useState(false);
 
     // Form fields
     const [name, setName] = useState('');
@@ -16,7 +17,7 @@ const AdminProducts = () => {
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('0');
     const [category, setCategory] = useState('');
-    const [imageFile, setImageFile] = useState(null);
+    const [imageBase64, setImageBase64] = useState(null); // base64 DataURL
 
     const config = { headers: { Authorization: `Bearer ${token}` } };
 
@@ -53,7 +54,7 @@ const AdminProducts = () => {
         setPrice('');
         setStock('0');
         setCategory('');
-        setImageFile(null);
+        setImageBase64(null);
         setIsModalOpen(true);
     };
 
@@ -64,7 +65,7 @@ const AdminProducts = () => {
         setPrice(product.price);
         setStock(product.stock.toString());
         setCategory(product.category || '');
-        setImageFile(null);
+        setImageBase64(product.image || null); // keep existing image
         setIsModalOpen(true);
     };
 
@@ -79,36 +80,43 @@ const AdminProducts = () => {
         }
     };
 
+    // Convert selected file to base64 DataURL
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImageBase64(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSaving(true);
 
-        // Use FormData to allow image upload
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append('price', price);
-        formData.append('stock', stock);
-        if (category) {
-            formData.append('category', category);
-        }
-        if (imageFile) {
-            formData.append('image', imageFile);
-        }
+        // Build JSON payload — no filesystem writes needed
+        const productData = {
+            name,
+            description,
+            price: parseFloat(price),
+            stock: parseInt(stock, 10),
+            category: category ? parseInt(category, 10) : null,
+            image: imageBase64 || null,
+        };
 
-        const multipartConfig = {
+        const jsonConfig = {
             headers: {
                 Authorization: `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'application/json',
+            },
         };
 
         try {
             if (currentProduct) {
-                // Update
-                await axios.put(`/api/products/${currentProduct.id}/`, formData, multipartConfig);
+                await axios.put(`/api/products/${currentProduct.id}/`, productData, jsonConfig);
             } else {
-                // Create
-                await axios.post('/api/products/', formData, multipartConfig);
+                await axios.post('/api/products/', productData, jsonConfig);
             }
             setIsModalOpen(false);
             fetchProducts();
@@ -121,6 +129,8 @@ const AdminProducts = () => {
                 errorMessage += "\n" + error.message;
             }
             alert(errorMessage);
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -203,20 +213,34 @@ const AdminProducts = () => {
                             <div className="flex-row-responsive gap-1">
                                 <div className="form-group w-full">
                                     <label>Price ($)</label>
-                                    <input type="number" step="0.01" value={price} onChange={e => setPrice(e.target.value)} required />
+                                    <input type="number" step="0.01" min="0" value={price} onChange={e => setPrice(e.target.value)} required />
                                 </div>
                                 <div className="form-group w-full">
                                     <label>Stock</label>
-                                    <input type="number" value={stock} onChange={e => setStock(e.target.value)} required />
+                                    <input type="number" min="0" value={stock} onChange={e => setStock(e.target.value)} required />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label>Product Image</label>
-                                <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} style={{ border: 'none', padding: '0' }} />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    style={{ border: 'none', padding: '0' }}
+                                />
+                                {imageBase64 && (
+                                    <img
+                                        src={imageBase64}
+                                        alt="Preview"
+                                        style={{ marginTop: '0.5rem', width: '80px', height: '80px', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border)' }}
+                                    />
+                                )}
                             </div>
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setIsModalOpen(false)} className="btn-outline">Cancel</button>
-                                <button type="submit" className="btn-primary">Save Product</button>
+                                <button type="submit" className="btn-primary" disabled={saving}>
+                                    {saving ? 'Saving...' : 'Save Product'}
+                                </button>
                             </div>
                         </form>
                     </div>
