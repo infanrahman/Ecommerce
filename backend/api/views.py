@@ -9,6 +9,7 @@ from .models import Product, Order, Category
 from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, UserSerializer, RegisterSerializer
 
 _product_image_column_checked = False
+_order_user_column_checked = False
 
 
 def ensure_product_image_column_text():
@@ -21,6 +22,21 @@ def ensure_product_image_column_text():
         cursor.execute("ALTER TABLE api_product ALTER COLUMN image TYPE text")
 
     _product_image_column_checked = True
+
+
+def ensure_order_user_column():
+    global _order_user_column_checked
+
+    if _order_user_column_checked or connection.vendor != 'postgresql':
+        return
+
+    with connection.cursor() as cursor:
+        cursor.execute("ALTER TABLE api_order ADD COLUMN IF NOT EXISTS user_id bigint NULL")
+        cursor.execute(
+            "CREATE INDEX IF NOT EXISTS api_order_user_id_idx ON api_order (user_id)"
+        )
+
+    _order_user_column_checked = True
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -69,10 +85,12 @@ class OrderViewSet(viewsets.ModelViewSet):
         return [permissions.IsAdminUser()]
 
     def perform_create(self, serializer):
+        ensure_order_user_column()
         user = self.request.user if self.request.user.is_authenticated else None
         serializer.save(user=user)
 
     def get_queryset(self):
+        ensure_order_user_column()
         user = self.request.user
         if user.is_staff:
             return Order.objects.all()
