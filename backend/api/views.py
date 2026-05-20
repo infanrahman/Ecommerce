@@ -4,8 +4,23 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
+from django.db import connection
 from .models import Product, Order, Category
 from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, UserSerializer, RegisterSerializer
+
+_product_image_column_checked = False
+
+
+def ensure_product_image_column_text():
+    global _product_image_column_checked
+
+    if _product_image_column_checked or connection.vendor != 'postgresql':
+        return
+
+    with connection.cursor() as cursor:
+        cursor.execute("ALTER TABLE api_product ALTER COLUMN image TYPE text")
+
+    _product_image_column_checked = True
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -33,6 +48,14 @@ class ProductViewSet(viewsets.ModelViewSet):
         if category_id:
             queryset = queryset.filter(category_id=category_id)
         return queryset
+
+    def perform_create(self, serializer):
+        ensure_product_image_column_text()
+        serializer.save()
+
+    def perform_update(self, serializer):
+        ensure_product_image_column_text()
+        serializer.save()
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
