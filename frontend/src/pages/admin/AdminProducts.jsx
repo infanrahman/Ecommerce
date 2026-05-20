@@ -114,7 +114,13 @@ const AdminProducts = () => {
             fetchProducts();
         } catch (error) {
             console.error("Error saving product", error);
-            alert("Error saving product. Please check the values.");
+            let errorMessage = "Error saving product. Please check the values.";
+            if (error.response && error.response.data) {
+                errorMessage += "\nDetails: " + JSON.stringify(error.response.data);
+            } else if (error.message) {
+                errorMessage += "\n" + error.message;
+            }
+            alert(errorMessage);
         }
     };
 
