@@ -122,7 +122,7 @@ const AdminProducts = () => {
 
     return (
         <div>
-            <header className="page-header" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <header className="page-header admin-page-header">
                 <div>
                     <h1>Manage Products</h1>
                     <p style={{ color: 'var(--text-muted)' }}>View, add, edit, and delete products in your store.</p>
@@ -145,18 +145,18 @@ const AdminProducts = () => {
                     <tbody>
                         {products.map(product => (
                             <tr key={product.id}>
-                                <td>
+                                <td data-label="Image">
                                     {product.image ? (
                                         <img src={product.image} alt={product.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} />
                                     ) : (
                                         <div style={{ width: '50px', height: '50px', backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--text-muted)', borderRadius: '4px' }}>No Image</div>
                                     )}
                                 </td>
-                                <td><strong>{product.name}</strong></td>
-                                <td>{product.category_name || 'Uncategorized'}</td>
-                                <td>${product.price}</td>
-                                <td>{product.stock}</td>
-                                <td>
+                                <td data-label="Name"><strong>{product.name}</strong></td>
+                                <td data-label="Category">{product.category_name || 'Uncategorized'}</td>
+                                <td data-label="Price">${product.price}</td>
+                                <td data-label="Stock">{product.stock}</td>
+                                <td data-label="Actions">
                                     <div className="table-actions">
                                         <button onClick={() => openEditModal(product)} className="btn-edit">Edit</button>
                                         <button onClick={() => handleDelete(product.id)} className="btn-delete">Delete</button>
@@ -176,7 +176,7 @@ const AdminProducts = () => {
                             <h2>{currentProduct ? 'Edit Product' : 'Add New Product'}</h2>
                             <button onClick={() => setIsModalOpen(false)} className="modal-close">&times;</button>
                         </div>
-                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <form onSubmit={handleSubmit} className="flex-col gap-1">
                             <div className="form-group">
                                 <label>Product Name</label>
                                 <input type="text" value={name} onChange={e => setName(e.target.value)} required />
@@ -194,12 +194,12 @@ const AdminProducts = () => {
                                 <label>Description</label>
                                 <textarea value={description} onChange={e => setDescription(e.target.value)} style={{ padding: '0.75rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)', minHeight: '80px', fontFamily: 'inherit' }} />
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                <div className="form-group">
+                            <div className="flex-row-responsive gap-1">
+                                <div className="form-group w-full">
                                     <label>Price ($)</label>
                                     <input type="number" step="0.01" value={price} onChange={e => setPrice(e.target.value)} required />
                                 </div>
-                                <div className="form-group">
+                                <div className="form-group w-full">
                                     <label>Stock</label>
                                     <input type="number" value={stock} onChange={e => setStock(e.target.value)} required />
                                 </div>

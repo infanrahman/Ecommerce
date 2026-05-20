@@ -116,7 +116,7 @@ const Checkout = () => {
 
     if (success) {
         return (
-            <div className="page-container success-page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center' }}>
+            <div className="page-container success-page flex-col flex-center min-h-60vh text-center">
                 <div style={{ background: '#ecfdf5', color: '#10b981', padding: '1.5rem', borderRadius: '50%', marginBottom: '1.5rem', fontSize: '2rem' }}>✓</div>
                 <h2 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Payment Successful!</h2>
                 <p style={{ color: 'var(--text-light)', marginBottom: '2rem' }}>Thank you for your order, <strong>{formData.name}</strong>. Your payment was processed successfully.</p>
@@ -125,15 +125,15 @@ const Checkout = () => {
         );
     }
 
-    if (cart.length === 0) return <div className="page-container" style={{ textAlign: 'center', padding: '3rem' }}>Your cart is empty.</div>;
+    if (cart.length === 0) return <div className="page-container text-center p-3">Your cart is empty.</div>;
 
     return (
-        <div className="page-container checkout-container" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem' }}>
-            <h2 style={{ color: 'var(--primary)', marginBottom: '2rem', textAlign: 'center' }}>Checkout</h2>
+        <div className="page-container checkout-container max-w-800">
+            <h2 className="text-center mb-2" style={{ color: 'var(--primary)' }}>Checkout</h2>
             
             {!isAuthenticated ? (
-                <div className="checkout-form" style={{ maxWidth: '480px', margin: '0 auto' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem' }}>
+                <div className="checkout-form max-w-480">
+                    <div className="flex-row-responsive mb-2">
                         <button 
                             type="button" 
                             onClick={() => { setIsRegisterMode(true); setAuthError(''); }}
@@ -168,13 +168,13 @@ const Checkout = () => {
                         </button>
                     </div>
 
-                    <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', color: 'var(--primary)' }}>
+                    <h3 className="text-center mb-1-5" style={{ color: 'var(--primary)' }}>
                         {isRegisterMode ? 'Create account to continue' : 'Sign in to continue'}
                     </h3>
 
-                    {authError && <p style={{ color: 'var(--danger)', marginBottom: '1rem', textAlign: 'center' }}>{authError}</p>}
+                    {authError && <p className="text-center mb-1" style={{ color: 'var(--danger)' }}>{authError}</p>}
 
-                    <form onSubmit={handleAuthSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <form onSubmit={handleAuthSubmit} className="flex-col gap-1-5">
                         <div className="form-group">
                             <label>Username</label>
                             <input 
@@ -225,13 +225,13 @@ const Checkout = () => {
                     </form>
                 </div>
             ) : (
-                <div className="checkout-grid" style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid #e5e7eb', paddingBottom: '1rem' }}>
+                <div className="checkout-grid" style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxSizing: 'border-box' }}>
+                    <div className="flex-row-responsive mb-1-5" style={{ justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: '1rem' }}>
                         <span>Logged in as <strong>{user?.username}</strong></span>
                         <button onClick={() => navigate('/cart')} style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontWeight: 'bold' }}>Modify Cart</button>
                     </div>
 
-                    <form className="checkout-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <form className="checkout-form flex-col gap-1-5" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label>Full Name</label>
                             <input 

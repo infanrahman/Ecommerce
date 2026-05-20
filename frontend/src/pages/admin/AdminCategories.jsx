@@ -77,7 +77,7 @@ const AdminCategories = () => {
 
     return (
         <div>
-            <header className="page-header" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <header className="page-header admin-page-header">
                 <div>
                     <h1>Manage Categories</h1>
                     <p style={{ color: 'var(--text-muted)' }}>Create, edit, and delete categories for products.</p>
@@ -97,9 +97,9 @@ const AdminCategories = () => {
                     <tbody>
                         {categories.map(category => (
                             <tr key={category.id}>
-                                <td><strong>{category.name}</strong></td>
-                                <td>{category.description || '-'}</td>
-                                <td>
+                                <td data-label="Name"><strong>{category.name}</strong></td>
+                                <td data-label="Description">{category.description || '-'}</td>
+                                <td data-label="Actions">
                                     <div className="table-actions">
                                         <button onClick={() => openEditModal(category)} className="btn-edit">Edit</button>
                                         <button onClick={() => handleDelete(category.id)} className="btn-delete">Delete</button>

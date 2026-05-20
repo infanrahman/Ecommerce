@@ -69,9 +69,9 @@ const AdminHome = () => {
                 </div>
             </div>
 
-            <div className="cart-summary" style={{ marginTop: '2rem' }}>
+            <div className="cart-summary mt-2">
                 <h3>Quick Actions</h3>
-                <p style={{ color: 'var(--text-muted)', margin: '1rem 0' }}>Use the sidebar navigation to manage products, categories, orders, and system users.</p>
+                <p className="mb-1" style={{ color: 'var(--text-muted)' }}>Use the sidebar navigation to manage products, categories, orders, and system users.</p>
             </div>
         </div>
     );

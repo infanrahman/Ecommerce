@@ -20,15 +20,15 @@ const ProductDetails = () => {
 
     return (
         <div className="page-container product-detail-container">
-            <button className="back-btn" onClick={() => navigate(-1)}>
+            <button className="back-btn mb-2" onClick={() => navigate(-1)}>
                 <ArrowLeft className="icon" /> Back
             </button>
             <div className="product-detail">
-                <div className="product-detail-image-wrap">
+                <div className="product-detail-image-wrap w-full flex-center">
                     {product.image ? (
                         <img src={product.image} alt={product.name} className="product-detail-image" />
                     ) : (
-                        <div className="product-image-placeholder large">No Image</div>
+                        <div className="product-image-placeholder large w-full">No Image</div>
                     )}
                 </div>
                 <div className="product-detail-info">

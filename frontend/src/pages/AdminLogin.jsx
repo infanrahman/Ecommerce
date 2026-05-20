@@ -55,11 +55,11 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="page-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-            <div className="checkout-form" style={{ width: '100%', maxWidth: '400px' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: 'var(--primary)' }}>Admin Login</h2>
-                {error && <p style={{ color: 'var(--danger)', marginBottom: '1rem', textAlign: 'center' }}>{error}</p>}
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="page-container flex-center min-h-60vh">
+            <div className="checkout-form max-w-400">
+                <h2 className="text-center mb-1-5" style={{ color: 'var(--primary)' }}>Admin Login</h2>
+                {error && <p className="text-center mb-1" style={{ color: 'var(--danger)' }}>{error}</p>}
+                <form onSubmit={handleSubmit} className="flex-col gap-1">
                     <div className="form-group">
                         <label>Username</label>
                         <input 

@@ -87,19 +87,19 @@ const AdminOrders = () => {
                     <tbody>
                         {orders.map(order => (
                             <tr key={order.id}>
-                                <td>#{order.id}</td>
-                                <td><strong>{order.customer_name}</strong></td>
-                                <td>{order.customer_email}</td>
-                                <td>${order.total_price}</td>
-                                <td>
+                                <td data-label="Order ID">#{order.id}</td>
+                                <td data-label="Customer"><strong>{order.customer_name}</strong></td>
+                                <td data-label="Email">{order.customer_email}</td>
+                                <td data-label="Total">${order.total_price}</td>
+                                <td data-label="Status">
                                     <span className="badge" style={getStatusStyle(order.status)}>
                                         {order.status}
                                     </span>
                                 </td>
-                                <td>{new Date(order.created_at).toLocaleDateString()}</td>
-                                <td>
+                                <td data-label="Date">{new Date(order.created_at).toLocaleDateString()}</td>
+                                <td data-label="Actions">
                                     <div className="table-actions">
-                                        <button onClick={() => setSelectedOrder(order)} className="btn-edit">View Details</button>
+                                        <button onClick={() => setSelectedOrder(order)} className="btn-edit">View</button>
                                         <select 
                                             value={order.status} 
                                             onChange={(e) => handleStatusChange(order.id, e.target.value)}

@@ -104,10 +104,10 @@ const AdminUsers = () => {
 
     return (
         <div>
-            <header className="page-header" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <header className="page-header admin-page-header">
                 <div>
                     <h1>Manage Users</h1>
-                    <p style={{ color: 'var(--text-muted)' }}>Administer users, permissions, and status.</p>
+                    <p style={{ color: 'var(--text-muted)' }}>View and edit system users and their permissions.</p>
                 </div>
                 <button onClick={openCreateModal} className="btn-primary">Add User</button>
             </header>
@@ -128,25 +128,25 @@ const AdminUsers = () => {
                     <tbody>
                         {users.map(user => (
                             <tr key={user.id}>
-                                <td><strong>{user.username}</strong></td>
-                                <td>{user.email || '-'}</td>
-                                <td>
+                                <td data-label="Username"><strong>{user.username}</strong></td>
+                                <td data-label="Email">{user.email || '-'}</td>
+                                <td data-label="Staff">
                                     <span className={`badge ${user.is_staff ? 'badge-staff' : 'badge-inactive'}`}>
                                         {user.is_staff ? 'Staff' : 'No'}
                                     </span>
                                 </td>
-                                <td>
+                                <td data-label="Superuser">
                                     <span className={`badge ${user.is_superuser ? 'badge-superuser' : 'badge-inactive'}`}>
                                         {user.is_superuser ? 'Superuser' : 'No'}
                                     </span>
                                 </td>
-                                <td>
+                                <td data-label="Status">
                                     <span className={`badge ${user.is_active ? 'badge-active' : 'badge-inactive'}`}>
                                         {user.is_active ? 'Active' : 'Inactive'}
                                     </span>
                                 </td>
-                                <td>{new Date(user.date_joined).toLocaleDateString()}</td>
-                                <td>
+                                <td data-label="Joined">{new Date(user.date_joined).toLocaleDateString()}</td>
+                                <td data-label="Actions">
                                     <div className="table-actions">
                                         <button onClick={() => openEditModal(user)} className="btn-edit">Edit</button>
                                         <button onClick={() => handleDelete(user.id)} className="btn-delete">Delete</button>
