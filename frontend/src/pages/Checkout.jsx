@@ -20,7 +20,9 @@ const Checkout = () => {
         username: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        first_name: '',
+        last_name: ''
     });
     const [authError, setAuthError] = useState('');
     const [authLoading, setAuthLoading] = useState(false);
@@ -53,7 +55,9 @@ const Checkout = () => {
                 const res = await axios.post('/api/register/', {
                     username: authFields.username,
                     email: authFields.email,
-                    password: authFields.password
+                    password: authFields.password,
+                    first_name: authFields.first_name,
+                    last_name: authFields.last_name
                 });
 
                 // Set token and log user in immediately
@@ -184,6 +188,29 @@ const Checkout = () => {
                                 onChange={e => setAuthFields({...authFields, username: e.target.value})} 
                             />
                         </div>
+
+                        {isRegisterMode && (
+                            <div className="flex-row-responsive gap-1">
+                                <div className="form-group w-full">
+                                    <label>First Name</label>
+                                    <input 
+                                        type="text" 
+                                        required 
+                                        value={authFields.first_name} 
+                                        onChange={e => setAuthFields({...authFields, first_name: e.target.value})} 
+                                    />
+                                </div>
+                                <div className="form-group w-full">
+                                    <label>Last Name</label>
+                                    <input 
+                                        type="text" 
+                                        required 
+                                        value={authFields.last_name} 
+                                        onChange={e => setAuthFields({...authFields, last_name: e.target.value})} 
+                                    />
+                                </div>
+                            </div>
+                        )}
 
                         {isRegisterMode && (
                             <div className="form-group">

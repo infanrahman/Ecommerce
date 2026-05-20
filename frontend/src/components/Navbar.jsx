@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { ShoppingCart, Store, X, Menu } from 'lucide-react';
+import { ShoppingCart, Store, X, Menu, User } from 'lucide-react';
 
 const Navbar = () => {
     const { cart } = useCart();
@@ -34,6 +34,10 @@ const Navbar = () => {
 
                 {/* Nav menu — slides in on mobile, horizontal on desktop */}
                 <div className={`nav-menu${menuOpen ? ' open' : ''}`}>
+                    <Link to="/profile" className="cart-link" onClick={closeMenu}>
+                        <User className="icon" />
+                        <span style={{ marginLeft: '0.5rem' }}>Profile</span>
+                    </Link>
                     <Link to="/cart" className="cart-link" onClick={closeMenu}>
                         <ShoppingCart className="icon" />
                         {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}

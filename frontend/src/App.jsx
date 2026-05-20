@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import UserProfile from './pages/UserProfile';
 import AdminLogin from './pages/AdminLogin';
 import AdminHome from './pages/AdminHome';
 import AdminProducts from './pages/admin/AdminProducts';
@@ -29,6 +30,11 @@ function App() {
                 <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <UserProfile />
+                  </ProtectedRoute>
+                } />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 
                 {/* Nested Admin Routes */}
