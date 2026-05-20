@@ -15,10 +15,6 @@
       "dest": "media/$1"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "static/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "ecommerce_project/wsgi.py"
     }
